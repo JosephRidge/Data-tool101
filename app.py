@@ -1,12 +1,19 @@
 import streamlit as st 
 import pandas as pd
 import matplotlib.pyplot as plt
+import plotly.express as px
+
+@st.cache_data
+def load_data():
+    df = pd.read_excel("data/Online Retail.xlsx")
+    return df
 
 tab1, tab2, tab3 = st.tabs(["home", "Visuals", "Modeling"])
-df = pd.read_excel("data/Online Retail.xlsx")
+df =load_data()
 legit_df =df[ df["CustomerID"].notna()  ]  # get legin transactions
 country_counts = legit_df["Country"].value_counts().head(3)
 stock_code_counts = legit_df["StockCode"].value_counts().head()
+st.cache_data
 
 with tab1:
     st.title("Online Customer Segmentation and Analysis of a UK Online Retail Store")
@@ -155,7 +162,7 @@ with tab2:
     fig = px.pie(
         values=stock_code_counts.values,
         names=stock_code_counts.index,
-        title="Top 3 Countries",
+        title="Top 5 Products",
     )
 
     # Show both percentage and count
